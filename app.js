@@ -4,10 +4,33 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+// DB 설정
+var mongodb = require('mongodb');
+var MongoClient = mongodb.MongoClient;
+// 세션 설정
+
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+// DB 연결
+async function connectDB() {
+  var databaseUrl = 'mongodb://localhost:27017';
+
+  try{
+    const database = await MongoClient.connect(databaseUrl,{
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log('DB 연결 성공');
+  }
+  catch(err){
+    console.log('DB 연결 실패');
+    process.exit(1);
+  }
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
